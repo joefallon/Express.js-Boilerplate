@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "inlineSourceMap": true,
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "skipLibCheck": true,
+    "strictFunctionTypes": true,
+    "target": "es5",
+    "lib": [ "es6", "dom", "scripthost" ]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

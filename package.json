@@ -1,0 +1,23 @@
+{
+  "name": "@joefallon/express-spike",
+  "version": "0.0.0",
+  "description": "Express-Spike",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joefallon/Express-Spike.git"
+  },
+  "author": "Joe Fallon <joseph.t.fallon@gmail.com> (http://blog.joefallon.net)",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/joefallon/Express-Spike/issues"
+  },
+  "homepage": "https://github.com/joefallon/Express-Spike#readme",
+  "devDependencies": {
+    "@types/node": "^9.4.6"
+  }
+}
