@@ -1,0 +1,41 @@
+server {
+    #listen   80; ## listen for ipv4; this line is default and implied
+    #listen   [::]:80 default ipv6only=on; ## listen for ipv6
+
+    root /var/www/Express-Spike/public;
+    index index.html index.htm;
+
+    server_name express-spike.lemp16.joefallon.net;
+    autoindex off;
+
+    access_log /var/log/nginx/development-access.log;
+    error_log  /var/log/nginx/development-error.log;
+
+    #location ~ /\. { access_log off; log_not_found off; deny all; }
+    #location ~ ~$  { access_log off; log_not_found off; deny all; }
+
+    location = /favicon.ico {
+        try_files $uri =204;
+    }
+
+    location / {
+        try_files $uri @backend;
+    }
+
+    location @backend {
+        proxy_pass http://127.0.0.1:3030;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_hide_header X-Powered-By;
+
+        proxy_buffering on;
+        proxy_buffer_size 1k;
+        proxy_buffers 24 4k;
+        proxy_busy_buffers_size 8k;
+        proxy_max_temp_file_size 2048m;
+        proxy_temp_file_write_size 32k;
+    }
+}
