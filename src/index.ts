@@ -1,5 +1,6 @@
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
+import * as csrf from 'csurf';
 import * as express from 'express';
 import * as path from 'path';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
@@ -8,6 +9,7 @@ import cookieSession = require('cookie-session');
 import config = require('./config/main_config');
 
 const app: express.Express = express();
+app.disable('x-powered-by');
 
 // View Engine Setup - EJS
 app.set('views', path.join(__dirname, 'views'));
@@ -20,12 +22,21 @@ app.use(cookieParser(config.cookie_secret));
 app.use(cookieSession({
     name: 'session',
     keys: [config.cookie_secret],
-    maxAge: 24 * 60 * 60 * 1000   // 24 hours
+    maxAge: 0,
+    httpOnly: true
 }));
 
 // use the proxy's (i.e. nginx) IP address
 // https://expressjs.com/en/guide/behind-proxies.html
 app.set('trust proxy', true);
+
+app.use(csrf({cookie: true}));
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+    res.locals.csrftoken = req.csrfToken();
+    next();
+});
+
 
 // Error Handlers
 if(app.get('env') == 'development') {
