@@ -1,14 +1,21 @@
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
-import * as csrf from 'csurf';
 import * as express from 'express';
 import * as path from 'path';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import cookieSession = require('cookie-session');
+import helmet = require('helmet');
+
+process.on('unhandledRejection', (reason, p) => {
+    console.error('Unhandled Rejection at:', p, 'reason:', reason);
+    // send entire app down. Process manager will restart it
+    process.exit(1);
+});
 
 import config = require('./config/main_config');
 
 const app: express.Express = express();
+app.use(helmet());
 app.disable('x-powered-by');
 
 // View Engine Setup - EJS
@@ -21,22 +28,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookie_secret));
 app.use(cookieSession({
     name: 'session',
-    keys: [config.cookie_secret],
     maxAge: 0,
-    httpOnly: true
+    httpOnly: true,
+    signed: true,
+    secret: config.cookie_secret
 }));
 
 // use the proxy's (i.e. nginx) IP address
 // https://expressjs.com/en/guide/behind-proxies.html
 app.set('trust proxy', true);
-
-app.use(csrf({cookie: true}));
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-    res.locals.csrftoken = req.csrfToken();
-    next();
-});
-
 
 // Error Handlers
 if(app.get('env') == 'development') {

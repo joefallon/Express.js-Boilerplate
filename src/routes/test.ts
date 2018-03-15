@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 const router:express.Router = express.Router();
 
 router.all('/', async (req:Request, res:Response) => {
-    res.send('hellow from /test');
+    res.send('hello from /test');
 });
 
 export = router;
