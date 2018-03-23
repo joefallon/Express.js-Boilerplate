@@ -55,7 +55,7 @@ if(app.get('env') == 'development') {
     app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         console.error(err.stack);
         res.status(err['status'] || 500);
-        // res.render('error', { message: err.message, error: err });
+        // res.render('error', { message: err.message, error: err }); // non-json error rendering
         res.json({'errors': {message: err.message, error: err}});
     });
 }
@@ -63,7 +63,7 @@ else {
     // Production Error Handler - stack traces will NOT be printed
     app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         res.status(err['status'] || 500);
-        return;
+        res.render('error', { message: err.message, error: {} }); // non-json error rendering
     });
 }
 
